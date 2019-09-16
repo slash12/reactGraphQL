@@ -17,7 +17,8 @@ const LAUNCHES_QUERY = gql`
 
 export default function Launches() {
     return (
-        <Fragment>            
+        <Fragment>
+            <h1 style={headStyle}>SpaceX</h1>
             <h5 className="display">Launches</h5>
             <MissionKey />
             <Query query={ LAUNCHES_QUERY }>
@@ -39,3 +40,10 @@ export default function Launches() {
         </Fragment>
     )
 }
+
+const headStyle = {
+    display: 'block',
+    margin: 'auto',
+    textAlign: 'center'
+}
+
