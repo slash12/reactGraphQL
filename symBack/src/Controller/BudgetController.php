@@ -23,14 +23,14 @@ class BudgetController extends Controller
      * @return JsonResponse
      */
     public function addAmount(Request $request)
-    {
+    {        
         // fetch request
         $request = $request->request->all();        
         // save new amount in db
         $b = new BudgetTrack();        
 
         // check if there is an amount in the request
-        if (!isset($request[0]['amount'])) {
+        if (!isset($request['amount'])) {
             return new JsonResponse([
                 'hint' => 'Amount is missing',
                 // 406
@@ -38,7 +38,7 @@ class BudgetController extends Controller
             ]);
         }
 
-        $amount = $request[0]['amount'];
+        $amount = $request['amount'];
 
         $b->setAmount($amount);
         // update db

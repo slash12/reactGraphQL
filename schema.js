@@ -5,7 +5,9 @@ const {
     GraphQLString, 
     GraphQLBoolean,
     GraphQLList,
-    GraphQLSchema
+    GraphQLSchema,
+    GraphQLFloat,
+    GraphQLNonNull
 } = require('graphql');
 
 //  Launch Type
@@ -31,8 +33,35 @@ const RocketType = new GraphQLObjectType({
     })
 });
 
+// Budget Amount Type
+const BAmountType = new GraphQLObjectType({
+    name: 'BAmountType',
+    fields: () => ({
+        amount: { type: GraphQLFloat },
+        hint: { type: GraphQLString },
+        statusCode: { type: GraphQLInt }
+    })
+})
+
+const Mutation =  new GraphQLObjectType({
+    name: 'Mutation',
+    fields:{
+        adBAdmount: {
+            type: BAmountType,
+            args: {
+                amount: { type: new GraphQLNonNull(GraphQLFloat) }
+            },
+            resolve(parent, args){
+                return axios.post('http://localhost:8000/add/amount', {
+                    amount: args.amount
+                }).then(res => res.data);
+            }
+        }
+    }
+})
+
 // Root Query
-const RootQuery = new  GraphQLObjectType({
+const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
     fields: {
         launches: {
@@ -73,5 +102,6 @@ const RootQuery = new  GraphQLObjectType({
 });
 
 module.exports = new GraphQLSchema({
-    query: RootQuery
+    query: RootQuery,
+    mutation: Mutation
 });
