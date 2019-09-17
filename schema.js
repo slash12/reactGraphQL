@@ -46,7 +46,7 @@ const BAmountType = new GraphQLObjectType({
 const Mutation =  new GraphQLObjectType({
     name: 'Mutation',
     fields:{
-        adBAdmount: {
+        adBAmount: {
             type: BAmountType,
             args: {
                 amount: { type: new GraphQLNonNull(GraphQLFloat) }
@@ -54,7 +54,7 @@ const Mutation =  new GraphQLObjectType({
             resolve(parent, args){
                 return axios.post('http://localhost:8000/add/amount', {
                     amount: args.amount
-                }).then(res => res.data);
+                }).then(res => res.data);                
             }
         }
     }
