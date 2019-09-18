@@ -47,4 +47,24 @@ class BudgetTrackRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function getAmounts()
+    {
+        $amounts = $this->createQueryBuilder('b')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $formattedAmount = [];
+
+        foreach ($amounts as $a) {
+            $formattedAmount[] = [
+                'id' => $a->getId(),
+                'amount' => $a->getAmount(),
+                'timestamp' => $a->getTimestamp()->format('j-M-y / g:i a'),
+            ];
+        }
+
+        return $formattedAmount;
+    }
 }

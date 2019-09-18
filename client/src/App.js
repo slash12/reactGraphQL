@@ -2,10 +2,10 @@ import React from 'react';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import AddAmount from './components/AddAmount';
+import AddAmount from './components/homeApp/AddAmount';
 import Home from './components/Home';
 import Header from './components/layout/Header';
-import Budget from './components/Budget';
+import Budget from './components/homeApp/Budget';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import './App.css';
 

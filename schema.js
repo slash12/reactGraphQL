@@ -33,13 +33,23 @@ const RocketType = new GraphQLObjectType({
     })
 });
 
-// Budget Amount Type
+// Budget Amount Type (for adding an amount to budget)
 const BAmountType = new GraphQLObjectType({
     name: 'BAmountType',
     fields: () => ({
         amount: { type: GraphQLFloat },
         hint: { type: GraphQLString },
-        statusCode: { type: GraphQLInt }
+        statusCode: { type: GraphQLInt },
+    })
+})
+
+// object for listing the amount entries from the budget
+const AmountType = new GraphQLObjectType({
+    name: 'AmountType',
+    fields: () => ({
+        id: { type: GraphQLInt },
+        amount: { type: GraphQLFloat },
+        timestamp: { type:GraphQLString }
     })
 })
 
@@ -64,10 +74,17 @@ const Mutation =  new GraphQLObjectType({
 const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
     fields: {
-        launches: {
-            type: new GraphQLList(LaunchType),
+        // launches: {
+        //     type: new GraphQLList(LaunchType),
+        //     resolve(parent, args) {
+        //         return axios.get('https://api.spacexdata.com/v3/launches')
+        //             .then(res => res.data);
+        //     }
+        // },
+        getAmounts: {
+            type: new GraphQLList(AmountType),
             resolve(parent, args) {
-                return axios.get('https://api.spacexdata.com/v3/launches')
+                return axios.get('http://localhost:8000/list/amount')
                     .then(res => res.data);
             }
         },

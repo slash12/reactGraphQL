@@ -8,10 +8,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 
 class BudgetController extends Controller
 {
@@ -51,5 +47,29 @@ class BudgetController extends Controller
             // 200
             'statusCode' => Response::HTTP_OK
         ]);
+    }
+
+     /**
+     * Lists all amount entries in the budget.
+     * @FOSRest\Get("/list/amount")
+     *
+     * @return Response
+     */
+    public function getBudgetAmounts()
+    {
+        $repository = $this->getDoctrine()->getRepository(BudgetTrack::class);
+        // find all amount with timestamps
+        $amountEntries = $repository->getAmounts();
+
+        // no amount found
+        if (count($amountEntries) === 0 || null == $amountEntries) {
+            return new JsonResponse([
+                'hint' => 'No amount entries found',
+                // 404
+                'statusCode' => Response::HTTP_NOT_FOUND,
+            ]);
+        }     
+
+        return new JsonResponse($amountEntries);
     }
 }
