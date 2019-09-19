@@ -1,39 +1,21 @@
 import React, { Component, Fragment } from 'react'
-import { Line } from 'react-chartjs-2';
-import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
-
-const AMOUNTS_QUERY = gql`
-    query getAmountsQuery{
-        getAmounts{
-            id
-            amount
-            timestamp
-        }
-    }
-`;
+import { Chart, Line } from 'react-chartjs-2';
+import * as zoom from 'chartjs-plugin-zoom';
+import 'react-hammerjs';
 
 export default class ChartBudget extends Component {
     
     constructor(props){
         super(props);
 
-        console.log
-
         this.state = {
             chartData: {
-                labels: [
-                    'January', 
-                    'February', 
-                    'March', 
-                    'April', 
-                    'May', 
-                    'June', 
-                    'July'
-                ],
+                showScale: true,
+                pointDot: true,
+                labels: props.label,
                 datasets: [
                     {
-                        label: 'My First dataset',
+                        label: 'Amount',
                         fill: false,
                         lineTension: 0.1,
                         backgroundColor: 'rgba(75,192,192,0.4)',
@@ -51,76 +33,44 @@ export default class ChartBudget extends Component {
                         pointHoverBorderWidth: 2,
                         pointRadius: 1,
                         pointHitRadius: 10,
-                        data: [
-                            65, 
-                            59, 
-                            80, 
-                            81, 
-                            56, 
-                            55, 
-                            40
-                        ]
+                        data: props.amountData,
                     }
-                ]
-            }
+                ],
+            },
         }        
     }
 
-    buildLabel(amount) {
-        let label = [];
-        
-        amount.map((val, i) => {
-            label.push(val.timestamp);
-        });
-
-        return label;
+    UNSAFE_componentWillMount() {
+        Chart.plugins.register(zoom);
     }
 
-    buildData(amount) {
-        let amountData = []
-
-        amount.map((val, i) => {
-            amountData.push(val.amount);
-        });
-
-        return amountData;
-    }
-
-    updateState = (label) => {
-        this.setState({
-            chartData: {
-                labels: label
-            }
-        })
-    }
-
-    render () {
+    render () {        
         return (
-            <div>
-                <Query query={ AMOUNTS_QUERY }>
-                {
-                    ({ loading, error, data }) => {
-                        if (loading) return <h4>Loading..</h4>;
-                        if (error) console.log(error);
-                        var amount = data.getAmounts;
-                        var label  = this.buildLabel(amount);
-                        var amountData = this.buildData(amount);                        
-                        // update state labels
-                        this.updateState(label);
-                        
-
-                        return <Fragment>
-                            <div className="chart">
-                                <Line
-                                    data={this.state.chartData}
-                                    options={{ maintainAspectRatio: false }}
-                                />
-                            </div>
-                        </Fragment>
-                    }
-                }
-                </Query>  
-            </div>
+            <Fragment>
+                <h1 className="display">Budget Overview</h1>
+                <div className="chart">
+                    <Line
+                        data={this.state.chartData}
+                        options={
+                            { 
+                                maintainAspectRatio: false,
+                                pan: {
+                                    enabled: true,
+                                    mode: 'x',                                    
+                                 },
+                                 zoom: {
+                                    enabled: true,
+                                    mode: 'x',
+                                    speed: 100
+                                 }
+                              }
+                            }
+                        width={1000}
+                        height={350}
+                    />
+                </div>
+            </Fragment>
+            
         )
     }
 }
