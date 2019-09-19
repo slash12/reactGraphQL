@@ -53,7 +53,7 @@ class BudgetController extends Controller
      * Lists all amount entries in the budget.
      * @FOSRest\Get("/list/amount")
      *
-     * @return Response
+     * @return JsonResponse
      */
     public function getBudgetAmounts()
     {
@@ -71,5 +71,63 @@ class BudgetController extends Controller
         }     
 
         return new JsonResponse($amountEntries);
+    }
+
+       /**
+     * Update an amount by id
+     * @FOSRest\Put("/update/amount/{id}")
+     * 
+     * @param int $id
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function updateBudgetById(Request $request, $id)
+    {
+        $request = $request->request->all();        
+        $budgetRepo = $this->getDoctrine()->getRepository(BudgetTrack::class);
+        $bTrack = $budgetRepo->find($id);
+
+        if (null == $bTrack) {
+            return new JsonResponse([
+                'hint' => 'No amount entry is found',
+                // 404
+                'statusCode' => Response::HTTP_NOT_FOUND
+            ]);
+        }        
+
+        // update article
+        if (null != $request['amount']) {
+            $bTrack->setAmount($request['amount']);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($bTrack);
+            $em->flush();
+        } else {
+            return new JsonResponse([
+                'hint' => 'Amount request value is missing',
+                // 406
+                'statusCode' => Response::HTTP_NOT_ACCEPTABLE
+            ]);
+        }
+
+        return new JsonResponse([
+            // 202
+            'statusCode' => Response::HTTP_ACCEPTED,
+            'hint'     => 'The article is updated'
+        ]);
+    }
+
+    /**
+     * Get an amount by id
+     * @FOSRest\Get("/amount/{id}")
+     *
+     * @return JsonResponse
+     */
+    public function getBudgetActionById($id)
+    {        
+        $repository = $this->getDoctrine()->getRepository(BudgetTrack::class);
+        // find budget by id
+        $bTrack = $repository->getAmountById($id);                        
+
+        return new JsonResponse($bTrack);
     }
 }

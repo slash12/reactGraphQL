@@ -11,14 +11,23 @@ export default function Header() {
 
             <div className="collapse navbar-collapse" id="navbarColor01">
                 <ul className="navbar-nav mr-auto">
-                {/* <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                </li> */}
-                <li className="nav-item">
-                    <Link to="/budget" className="nav-link">Budget</Link>
-                </li>
+                    {/* <li class="nav-item active">
+                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    </li> */}
+                    <li className="nav-item">
+                        <Link to="/budget" className="nav-link">Budget</Link>
+                    </li>
                 </ul>
+                <span>
+                    <button className="my-2 btn btn-secondary" onClick={refreshPage}>
+                        Refresh
+                    </button>
+                </span>
             </div>
         </nav>
     )
+}
+
+const refreshPage = () => {
+    window.location.reload(false);
 }

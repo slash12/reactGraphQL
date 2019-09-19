@@ -48,6 +48,11 @@ class BudgetTrackRepository extends ServiceEntityRepository
     }
     */
 
+    /**
+     * Get all formatted amounts
+     *
+     * @return array
+     */
     public function getAmounts()
     {
         $amounts = $this->createQueryBuilder('b')
@@ -66,5 +71,33 @@ class BudgetTrackRepository extends ServiceEntityRepository
         }
 
         return $formattedAmount;
+    }
+
+    /**
+     * get specified amount
+     *
+     * @param int $id
+     * @return array|null
+     */
+    public function getAmountById($id)
+    {
+        $amount = $this->createQueryBuilder('b')
+                ->andWhere('b.id = :id')
+                ->setParameter('id', $id)
+                ->getQuery()
+                ->getOneOrNullResult()
+            ;
+        
+        if ($amount) {            
+            $amountArray = [
+                'id' => $amount->getId(),
+                'amount' => $amount->getAmount(),
+                'timestamp' => $amount->getTimestamp()->format('j-M-y / g:i a')
+            ];
+
+            return $amountArray;
+        } else {
+            return null;
+        }
     }
 }

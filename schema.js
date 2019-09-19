@@ -66,6 +66,18 @@ const Mutation =  new GraphQLObjectType({
                     amount: args.amount
                 }).then(res => res.data);                
             }
+        },
+        upBAmount: {
+            type: BAmountType,
+            args: {
+                id: { type: new GraphQLNonNull(GraphQLInt) },
+                amount: { type: new GraphQLNonNull(GraphQLFloat) }
+            },
+            resolve(parent, args){
+                return axios.put(`http://localhost:8000/update/amount/${args.id}`, {
+                    amount: args.amount
+                }).then(res => res.data);                
+            }
         }
     }
 })
@@ -85,6 +97,16 @@ const RootQuery = new GraphQLObjectType({
             type: new GraphQLList(AmountType),
             resolve(parent, args) {
                 return axios.get('http://localhost:8000/list/amount')
+                    .then(res => res.data);
+            }
+        },
+        getAmountById: {
+            type: AmountType,
+            args: {
+                id: { type: GraphQLInt }
+            },
+            resolve(parent, args) {
+                return axios.get(`http://localhost:8000/amount/${args.id}`)
                     .then(res => res.data);
             }
         },

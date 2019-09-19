@@ -47,7 +47,7 @@ export default class ChartBudget extends Component {
     render () {        
         return (
             <Fragment>
-                <h1 className="display">Budget Overview</h1>
+                <h4 className="display">Budget Overview</h4>
                 <div className="chart">
                     <Line
                         data={this.state.chartData}

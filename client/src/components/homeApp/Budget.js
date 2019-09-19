@@ -38,10 +38,6 @@ class Budget extends Component {
         return amountData;
     }
 
-    refreshPage() {
-        window.location.reload(false);
-    }
-
     render() {                
         return (
             <div className="container">
@@ -54,14 +50,7 @@ class Budget extends Component {
                         var label  = this.buildLabel(amount);
                         var amountData = this.buildData(amount);                        
 
-                        return <Fragment>
-                            <div className="row">
-                            <div className="col-sm">
-                                <button style={{float: 'right'}} className="my-2 btn btn-secondary" onClick={this.refreshPage}>
-                                    Refresh
-                                </button>
-                            </div>
-                            </div>
+                        return <Fragment>                            
                             <div className="row">
                                 <div className="col-sm-4">
                                     <AddAmount />
